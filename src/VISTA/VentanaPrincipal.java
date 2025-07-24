@@ -10,7 +10,10 @@ import MODELO.Cliente;
 import MODELO.Restaurante;
 import MODELO.Plato;
 import MODELO.Bebidas;
+import MODELO.Mesa;
 import MODELO.Postres;
+import MODELO.Reserva;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 
@@ -27,6 +30,9 @@ private ArrayList<Restaurante> listaRestaurantes = new ArrayList<>();
 private int idRestaurante = 1;
 private DefaultTableModel modeloTablaRestaurantes;
 private DefaultTableModel modeloTablaMesas;
+private ArrayList<Reserva> listaReservas = new ArrayList<>();
+private int idReserva = 1;
+private DefaultTableModel modeloTablaReservas;
 
 
 
@@ -82,8 +88,41 @@ actualizarCombosRestaurantes();
 tablaPlatos.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0));
 tablaBebidas.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0));
 tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0));
+modeloTablaReservas = new DefaultTableModel();
+modeloTablaReservas.addColumn("ID");
+modeloTablaReservas.addColumn("Cliente");
+modeloTablaReservas.addColumn("Restaurante");
+modeloTablaReservas.addColumn("Mesa");
+modeloTablaReservas.addColumn("Fecha");
+modeloTablaReservas.addColumn("Hora");
+modeloTablaReservas.addColumn("Personas");
+tablaReservas.setModel(modeloTablaReservas);
+
+// Llenar combos
+    llenarComboClientes();
+    llenarComboRestaurantesReserva();
+// Mostrar datos de clientes en la tabla al iniciar
+    mostrarClientesEnTabla();
 
     }
+private void mostrarClientesEnTabla() {
+    // Limpiar tabla primero
+    modeloTabla.setRowCount(0);
+
+    // Obtener lista de clientes desde la BD
+    List<Cliente> clientes = Cliente.obtenerTodosClientes();
+
+    // Agregar cada cliente a la tabla
+    for (Cliente c : clientes) {
+        modeloTabla.addRow(new Object[]{
+            c.getId(),
+            c.getNombre(),
+            c.getEmail(),
+            c.getTelefono(),
+            c.isVegetariano() ? "Sí" : "No"
+        });
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -124,7 +163,6 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
         jLabel12 = new javax.swing.JLabel();
         capacidadMesafield = new javax.swing.JTextField();
         agregarMesabtn = new javax.swing.JButton();
-        menuspanel = new javax.swing.JPanel();
         Inventariospanel = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         comboRestaurantesInventario = new javax.swing.JComboBox<>();
@@ -173,7 +211,22 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
         txtCaloriasPostre = new javax.swing.JTextField();
         btnAgregarPostre = new javax.swing.JButton();
         Reservaspanel = new javax.swing.JPanel();
-        VerMenupanel = new javax.swing.JPanel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        btnCrearReserva = new javax.swing.JButton();
+        comboClientes = new javax.swing.JComboBox<>();
+        comboRestaurantesReserva = new javax.swing.JComboBox<>();
+        comboMesasDisponibles = new javax.swing.JComboBox<>();
+        fechaReservaField = new javax.swing.JTextField();
+        horaReservaField = new javax.swing.JTextField();
+        numPersonasField = new javax.swing.JTextField();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tablaReservas = new javax.swing.JTable();
         Mesaspanel = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         comboRestaurantes = new javax.swing.JComboBox<>();
@@ -254,7 +307,7 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
                             .addGroup(ClientespanelLayout.createSequentialGroup()
                                 .addGap(58, 58, 58)
                                 .addComponent(Registrarbotton, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(ClientespanelLayout.createSequentialGroup()
@@ -366,7 +419,7 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
                     .addGroup(RestaurantespanelLayout.createSequentialGroup()
                         .addGap(81, 81, 81)
                         .addComponent(agregarMesabtn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(RestaurantespanelLayout.createSequentialGroup()
                 .addGap(83, 83, 83)
@@ -376,7 +429,7 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
         RestaurantespanelLayout.setVerticalGroup(
             RestaurantespanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, RestaurantespanelLayout.createSequentialGroup()
-                .addGap(0, 88, Short.MAX_VALUE)
+                .addGap(0, 90, Short.MAX_VALUE)
                 .addComponent(jLabel8)
                 .addGroup(RestaurantespanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(RestaurantespanelLayout.createSequentialGroup()
@@ -408,22 +461,8 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
 
         panelTabs.addTab("RESTAURANTES", Restaurantespanel);
 
-        javax.swing.GroupLayout menuspanelLayout = new javax.swing.GroupLayout(menuspanel);
-        menuspanel.setLayout(menuspanelLayout);
-        menuspanelLayout.setHorizontalGroup(
-            menuspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 735, Short.MAX_VALUE)
-        );
-        menuspanelLayout.setVerticalGroup(
-            menuspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 520, Short.MAX_VALUE)
-        );
-
-        panelTabs.addTab("MENUS", menuspanel);
-
         jLabel14.setText("SELECCIONE RESTAURANTE");
 
-        comboRestaurantesInventario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         comboRestaurantesInventario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboRestaurantesInventarioActionPerformed(evt);
@@ -492,7 +531,7 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
                         .addGroup(panelPlatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnAgregarPlato, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(chkActivoPlato, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         panelPlatosLayout.setVerticalGroup(
@@ -501,7 +540,7 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
                 .addContainerGap()
                 .addGroup(panelPlatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelPlatosLayout.createSequentialGroup()
-                        .addGap(0, 30, Short.MAX_VALUE)
+                        .addGap(0, 32, Short.MAX_VALUE)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelPlatosLayout.createSequentialGroup()
                         .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -609,7 +648,7 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
                         .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(voltext)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         panelBebidasLayout.setVerticalGroup(
@@ -731,7 +770,7 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
                     .addGroup(panelPostresLayout.createSequentialGroup()
                         .addGap(64, 64, 64)
                         .addComponent(btnAgregarPostre, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -764,7 +803,7 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
                 .addComponent(btnAgregarPostre, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPostresLayout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
+                .addContainerGap(23, Short.MAX_VALUE)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -800,33 +839,117 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
                 .addComponent(tabInventario))
         );
 
-        panelTabs.addTab("INVENTARIO", Inventariospanel);
+        panelTabs.addTab("MENUS", Inventariospanel);
+        Inventariospanel.getAccessibleContext().setAccessibleName("");
+
+        jLabel28.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel28.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel28.setText("REGISTRAR RESERVAS");
+
+        jLabel29.setText("SELECCIONA CLIENTE");
+
+        jLabel30.setText("SELECCIONA RESTAURANTE");
+
+        jLabel31.setText("SELECCIONA MESA DISPONIBLE");
+
+        jLabel32.setText("FECHA");
+
+        jLabel33.setText("HORA");
+
+        jLabel34.setText("NRO PERSONAS");
+
+        btnCrearReserva.setText("CREAR RESERVA");
+        btnCrearReserva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrearReservaActionPerformed(evt);
+            }
+        });
+
+        tablaReservas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane6.setViewportView(tablaReservas);
 
         javax.swing.GroupLayout ReservaspanelLayout = new javax.swing.GroupLayout(Reservaspanel);
         Reservaspanel.setLayout(ReservaspanelLayout);
         ReservaspanelLayout.setHorizontalGroup(
             ReservaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 735, Short.MAX_VALUE)
+            .addGroup(ReservaspanelLayout.createSequentialGroup()
+                .addGroup(ReservaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(ReservaspanelLayout.createSequentialGroup()
+                        .addGap(178, 178, 178)
+                        .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(ReservaspanelLayout.createSequentialGroup()
+                        .addGroup(ReservaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(ReservaspanelLayout.createSequentialGroup()
+                                .addGap(16, 16, 16)
+                                .addGroup(ReservaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel30, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(ReservaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(comboClientes, 0, 128, Short.MAX_VALUE)
+                                    .addComponent(comboRestaurantesReserva, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(comboMesasDisponibles, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(fechaReservaField)
+                                    .addComponent(horaReservaField)
+                                    .addComponent(numPersonasField)))
+                            .addGroup(ReservaspanelLayout.createSequentialGroup()
+                                .addGap(148, 148, 148)
+                                .addComponent(btnCrearReserva, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         ReservaspanelLayout.setVerticalGroup(
             ReservaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 520, Short.MAX_VALUE)
+            .addGroup(ReservaspanelLayout.createSequentialGroup()
+                .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(ReservaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(ReservaspanelLayout.createSequentialGroup()
+                        .addGroup(ReservaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(comboClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                            .addComponent(jLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(ReservaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(comboRestaurantesReserva, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                            .addComponent(jLabel30, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(ReservaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(comboMesasDisponibles, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                            .addComponent(jLabel31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(ReservaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(fechaReservaField, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                            .addComponent(jLabel32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(ReservaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(horaReservaField, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+                            .addComponent(jLabel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(ReservaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(numPersonasField, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCrearReserva, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE))
+                .addGap(0, 76, Short.MAX_VALUE))
         );
 
         panelTabs.addTab("RESERVAS", Reservaspanel);
-
-        javax.swing.GroupLayout VerMenupanelLayout = new javax.swing.GroupLayout(VerMenupanel);
-        VerMenupanel.setLayout(VerMenupanelLayout);
-        VerMenupanelLayout.setHorizontalGroup(
-            VerMenupanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 735, Short.MAX_VALUE)
-        );
-        VerMenupanelLayout.setVerticalGroup(
-            VerMenupanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 520, Short.MAX_VALUE)
-        );
-
-        panelTabs.addTab("VER MENU", VerMenupanel);
 
         jLabel13.setText("SELECCIONA RESTAURANTES");
 
@@ -863,7 +986,7 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(82, 82, 82)
                         .addComponent(comboRestaurantes, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
         MesaspanelLayout.setVerticalGroup(
             MesaspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -873,7 +996,7 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
                     .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(comboRestaurantes, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tablaMesas, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+                .addComponent(tablaMesas, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -917,16 +1040,17 @@ tablaPostres.setModel(new DefaultTableModel(new Object[]{"Nombre", "Precio"}, 0)
 
     private void btnAgregarPlatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarPlatoActionPerformed
 int index = comboRestaurantesInventario.getSelectedIndex();
+int ar=listaRestaurantes.get(index).getId();
+int b=ar++;
 if (index >= 0) {
 Restaurante r = listaRestaurantes.get(index);
-int ar=listaRestaurantes.get(index).getId();
 String nombre = txtNombrePlato.getText();
 String descripcion= txtDescripcionPlato.getText();
 Boolean disponible= chkActivoPlato.getAutoscrolls();
 double precio= Double.parseDouble(txtPrecioPlato.getText());
+
 try {
-precio = Double.parseDouble(txtNombrePlato.getText());
-Plato nuevo = new Plato(ar,nombre, descripcion,precio,disponible);
+Plato nuevo = new Plato(b,nombre, descripcion,precio,disponible);
 r.agregarPlato(nuevo);
 cargarTablaPlatos(r);
 txtNombrePlato.setText("");
@@ -1002,15 +1126,18 @@ int ar=listaRestaurantes.get(index).getId();
 int b=ar++;
 if (index >= 0) {
 Restaurante r = listaRestaurantes.get(index);
-String nombre = txtNombreBebida.getText();
-String descripcion= txtDescripcionBebida.getText();
-Boolean disponible= chkDisponibleBebida.getAutoscrolls();
-double precio= Double.parseDouble(txtPrecioBebida.getText());
-Boolean estado= chkAlcoholicaBebida.getAutoscrolls();
-Boolean diab= chkAlcoholicaBebida.getAutoscrolls();
+String nombre = txtNombrePostre.getText();
+String descripcion= txtDescripcionPostre.getText();
+Boolean disponible= chkDisponiblePostre.getAutoscrolls();
+double precio= Double.parseDouble(txtPrecioPostre.getText());
+Boolean diab= chkAptoCeliacos.getAutoscrolls();
 int calorias = Integer.parseInt(txtCaloriasPostre.getText());
+    System.out.println(b+nombre+ descripcion+precio+disponible+diab+calorias);
+    
 try {
-Postres nuevo = new Postres(b,nombre, descripcion,precio,estado,diab,calorias);
+        System.out.println(b+nombre+ descripcion+precio+disponible+diab+calorias);
+
+Postres nuevo = new Postres(b,nombre, descripcion,precio,disponible,diab,calorias);
 r.agregarPostre(nuevo);
 cargarTablaPostres(r);
 txtNombreBebida.setText("");
@@ -1022,6 +1149,66 @@ JOptionPane.showMessageDialog(this, "Precio no válido.");
 JOptionPane.showMessageDialog(this, "Selecciona un restaurante.");
 }
     }//GEN-LAST:event_btnAgregarPostreActionPerformed
+
+    private void btnCrearReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearReservaActionPerformed
+int clienteIndex = comboClientes.getSelectedIndex();
+    int restIndex = comboRestaurantesReserva.getSelectedIndex();
+    int mesaIndex = comboMesasDisponibles.getSelectedIndex();
+
+    if (clienteIndex == -1 || restIndex == -1 || mesaIndex == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Selecciona cliente, restaurante y mesa.");
+        return;
+    }
+
+    String fecha = fechaReservaField.getText();
+    String hora = horaReservaField.getText();
+    String numPersStr = numPersonasField.getText();
+
+    if (fecha.isEmpty() || hora.isEmpty() || numPersStr.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Completa todos los campos.");
+        return;
+    }
+
+    try {
+        int numPers = Integer.parseInt(numPersStr);
+        Cliente cliente = listaClientes.get(clienteIndex);
+        Restaurante restaurante = listaRestaurantes.get(restIndex);
+
+        // Buscar la mesa disponible seleccionada
+        Mesa mesaElegida = null;
+        for (Mesa m : restaurante.getMesasDisponibles()) {
+            if (m.isDisponible()) {
+                if (("Mesa " + m.getId() + " (" + m.getCapacidad() + " personas)").equals(comboMesasDisponibles.getSelectedItem())) {
+                    mesaElegida = m;
+                    break;
+                }
+            }
+        }
+
+        if (mesaElegida == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "La mesa ya no está disponible.");
+            return;
+        }
+
+        Reserva nuevaReserva = new Reserva(idReserva++, fecha, hora, numPers, mesaElegida, cliente);
+        listaReservas.add(nuevaReserva);
+
+        modeloTablaReservas.addRow(new Object[]{
+            nuevaReserva.getId(),
+            cliente.getNombre(),
+            restaurante.getNombre(),
+            "Mesa " + mesaElegida.getId(),
+            fecha,
+            hora,
+            numPers
+        });
+
+        javax.swing.JOptionPane.showMessageDialog(this, "Reserva registrada correctamente.");
+        llenarComboMesasDisponibles(); // actualizar mesas
+
+    } catch (NumberFormatException ex) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Número de personas inválido.");
+    }    }//GEN-LAST:event_btnCrearReservaActionPerformed
 // ACTUALIZA LA TABLA DE PLATOS
 private void cargarTablaPlatos(Restaurante restaurante) {
 DefaultTableModel modelo = (DefaultTableModel) tablaPlatos.getModel();
@@ -1068,6 +1255,7 @@ modelo.addRow(new Object[]{p.getNombre(), p.getPrecio()});
 
         MODELO.Mesa nuevaMesa = new MODELO.Mesa(idMesa, capacidad);
         restaurante.agregarMesa(nuevaMesa);
+llenarComboClientes();
 
         javax.swing.JOptionPane.showMessageDialog(this, "Mesa agregada exitosamente.");
 
@@ -1083,10 +1271,14 @@ modelo.addRow(new Object[]{p.getNombre(), p.getPrecio()});
         }
 
     }
+        llenarComboMesasDisponibles();
+
+    
 }
 private void actualizarCombosRestaurantes
         () {
     comboRestaurantes.removeAllItems();
+    comboRestaurantesInventario.removeAllItems();
     for (Restaurante r : listaRestaurantes) {
         comboRestaurantes.addItem(r.getNombre());
         comboRestaurantesInventario.addItem(r.getNombre());
@@ -1136,6 +1328,8 @@ private void mostrarMesasDeRestauranteSeleccionado() {
     direccionresfield.setText("");
     telefonoresfield.setText("");
     actualizarCombosRestaurantes();
+    llenarComboRestaurantesReserva();
+
 
 }
 
@@ -1158,7 +1352,11 @@ private void mostrarMesasDeRestauranteSeleccionado() {
     // Guardar en BD
     nuevo.guardarEnBD();
     
-    // Agregar a la tabla
+    // Guardar en archivo .txt
+    nuevo.guardarEnArchivoTxt(); // <<--- NUEVA LÍNEA
+
+    // Actualizar combo y tabla
+    llenarComboClientes();
     modeloTabla.addRow(new Object[]{
         nuevo.getId(),
         nuevo.getNombre(),
@@ -1173,6 +1371,40 @@ private void mostrarMesasDeRestauranteSeleccionado() {
     telefonoclifield.setText("");
     prefclifield.setSelected(false);
 }
+
+   private void llenarComboClientes() {
+    comboClientes.removeAllItems();
+    for (Cliente c : listaClientes) {
+        comboClientes.addItem(c.getId() + " - " + c.getNombre());
+    }
+}
+
+private void llenarComboRestaurantesReserva() {
+    comboRestaurantesReserva.removeAllItems();
+    for (Restaurante r : listaRestaurantes) {
+        comboRestaurantesReserva.addItem(r.getId() + " - " + r.getNombre());
+    }
+}
+
+private void llenarComboMesasDisponibles() {
+    comboMesasDisponibles.removeAllItems();
+
+    int indexRest = comboRestaurantesReserva.getSelectedIndex();
+    if (indexRest == -1) return;
+
+    Restaurante rest = listaRestaurantes.get(indexRest);
+    for (Mesa m : rest.getMesasDisponibles()) {
+        if (m.isDisponible()) {
+            comboMesasDisponibles.addItem("Mesa " + m.getId() + " (" + m.getCapacidad() + " personas)");
+        }
+    }
+    comboRestaurantesReserva.addActionListener(e -> {
+    llenarComboMesasDisponibles();
+});
+
+}
+
+
 
    
 
@@ -1235,23 +1467,28 @@ private void mostrarMesasDeRestauranteSeleccionado() {
     private javax.swing.JButton Registrarbotton;
     private javax.swing.JPanel Reservaspanel;
     private javax.swing.JPanel Restaurantespanel;
-    private javax.swing.JPanel VerMenupanel;
     private javax.swing.JButton agregarMesabtn;
     private javax.swing.JButton btnAgregarBebida;
     private javax.swing.JButton btnAgregarPlato;
     private javax.swing.JButton btnAgregarPostre;
     private javax.swing.JButton btnCargarInventario;
+    private javax.swing.JButton btnCrearReserva;
     private javax.swing.JTextField capacidadMesafield;
     private javax.swing.JCheckBox chkActivoPlato;
     private javax.swing.JCheckBox chkAlcoholicaBebida;
     private javax.swing.JCheckBox chkAptoCeliacos;
     private javax.swing.JCheckBox chkDisponibleBebida;
     private javax.swing.JCheckBox chkDisponiblePostre;
+    private javax.swing.JComboBox<String> comboClientes;
+    private javax.swing.JComboBox<String> comboMesasDisponibles;
     private javax.swing.JComboBox<String> comboRestaurantes;
     private javax.swing.JComboBox<String> comboRestaurantesInventario;
+    private javax.swing.JComboBox<String> comboRestaurantesReserva;
     private javax.swing.JLabel dasdasd;
     private javax.swing.JTextField direccionresfield;
     private javax.swing.JTextField emailclifield;
+    private javax.swing.JTextField fechaReservaField;
+    private javax.swing.JTextField horaReservaField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1272,7 +1509,14 @@ private void mostrarMesasDeRestauranteSeleccionado() {
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1284,12 +1528,13 @@ private void mostrarMesasDeRestauranteSeleccionado() {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable4;
-    private javax.swing.JPanel menuspanel;
     private javax.swing.JTextField nombreclifield;
     private javax.swing.JTextField nombrerestfield;
+    private javax.swing.JTextField numPersonasField;
     private javax.swing.JPanel panelBebidas;
     private javax.swing.JPanel panelPlatos;
     private javax.swing.JPanel panelPostres;
@@ -1301,6 +1546,7 @@ private void mostrarMesasDeRestauranteSeleccionado() {
     private javax.swing.JScrollPane tablaMesas;
     private javax.swing.JTable tablaPlatos;
     private javax.swing.JTable tablaPostres;
+    private javax.swing.JTable tablaReservas;
     private javax.swing.JTextField telefonoclifield;
     private javax.swing.JTextField telefonoresfield;
     private javax.swing.JTextField txtCaloriasPostre;

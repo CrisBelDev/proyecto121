@@ -1,0 +1,6 @@
+ID: 17, Nombre: jorge, Email: sdfgh, Teléfono: 23456, Vegetariano: No
+ID: 2, Nombre: mari, Email: sdfgh, Teléfono: 23456, Vegetariano: Sí
+ID: 19, Nombre: lady, Email: sdfg, Teléfono: 34567, Vegetariano: Sí
+ID: 20, Nombre: juan, Email: tttt, Teléfono: 45666, Vegetariano: No
+ID: 21, Nombre: oso, Email: oso@osio.com, Teléfono: 23456, Vegetariano: No
+ID: 22, Nombre: patito, Email: patito, Teléfono: 3456, Vegetariano: Sí

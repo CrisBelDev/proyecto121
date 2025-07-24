@@ -34,4 +34,61 @@ public class Reserva {
     public void mostrar() {
         System.out.println("Reserva #" + id + " para " + cliente.getNombre() + " en mesa de " + mesa.getCapacidad() + " personas");
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public String getHora() {
+        return hora;
+    }
+
+    public int getNumPersonas() {
+        return numPersonas;
+    }
+
+    public Mesa getMesa() {
+        return mesa;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public boolean isActiva() {
+        return activa;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
+
+    public void setNumPersonas(int numPersonas) {
+        this.numPersonas = numPersonas;
+    }
+
+    public void setMesa(Mesa mesa) {
+        this.mesa = mesa;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public void setActiva(boolean activa) {
+        this.activa = activa;
+    }
+    
 }

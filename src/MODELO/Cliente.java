@@ -1,16 +1,15 @@
 package MODELO;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cliente extends Persona {
     private boolean vegetariano;
-    
+
     public Cliente() {
         // Constructor vacío
     }
@@ -19,8 +18,6 @@ public class Cliente extends Persona {
         super(id, nombre, email, telefono);
         this.vegetariano = vegetariano;
     }
-    
-   
 
     // Métodos getter y setter
     public boolean isVegetariano() {
@@ -34,25 +31,26 @@ public class Cliente extends Persona {
     // Método para guardar cliente directamente en la BD
     public void guardarEnBD() {
         String sql = "INSERT INTO clientes (nombre, email, telefono, vegetariano) VALUES (?, ?, ?, ?)";
-        
+
         try (Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/sistema_restaurantes", 
-                "root", 
+                "jdbc:mysql://localhost:3306/sistema_restaurantes",
+                "root",
                 "");
              PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            
+
             pstmt.setString(1, this.getNombre());
             pstmt.setString(2, this.getEmail());
             pstmt.setString(3, this.getTelefono());
             pstmt.setBoolean(4, this.isVegetariano());
-            
+
             int affectedRows = pstmt.executeUpdate();
-            
+
             if (affectedRows > 0) {
                 try (ResultSet rs = pstmt.getGeneratedKeys()) {
                     if (rs.next()) {
                         this.setId(rs.getInt(1));
                         System.out.println("Cliente guardado con ID: " + this.getId());
+                        //guardarEnArchivoTxt(); // También guardamos en el archivo TXT
                     }
                 }
             }
@@ -61,18 +59,34 @@ public class Cliente extends Persona {
         }
     }
 
+    // Método adicional para guardar en un archivo .txt
+    public void guardarEnArchivoTxt() {
+        String rutaArchivo = "clientes.txt"; // Puedes personalizar la ruta si deseas
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(rutaArchivo, true))) {
+            writer.write("ID: " + this.getId() +
+                         ", Nombre: " + this.getNombre() +
+                         ", Email: " + this.getEmail() +
+                         ", Teléfono: " + this.getTelefono() +
+                         ", Vegetariano: " + (this.isVegetariano() ? "Sí" : "No"));
+            writer.newLine();
+            System.out.println("Cliente guardado en archivo: " + rutaArchivo);
+        } catch (IOException e) {
+            System.err.println("Error al escribir en archivo: " + e.getMessage());
+        }
+    }
+
     // Método para obtener todos los clientes desde la BD
     public static List<Cliente> obtenerTodosClientes() {
         List<Cliente> clientes = new ArrayList<>();
         String sql = "SELECT * FROM clientes";
-        
+
         try (Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/sistema_restaurantes", 
-                "root", 
+                "jdbc:mysql://localhost:3306/sistema_restaurantes",
+                "root",
                 "");
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
-            
+
             while (rs.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(rs.getInt("id"));
@@ -96,7 +110,7 @@ public class Cliente extends Persona {
         nuevo.setEmail("ana@test.com");
         nuevo.setTelefono("5559876543");
         nuevo.setVegetariano(false);
-        nuevo.guardarEnBD();
+        nuevo.guardarEnBD(); // También guarda en archivo automáticamente
 
         // Prueba de obtención
         System.out.println("\nListado de clientes:");
@@ -107,6 +121,6 @@ public class Cliente extends Persona {
     }
 
     public boolean getPreferencia() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
